@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<script src="~/Scripts/myTicketbookingScript.js"></script>
+<div class="jumbotron">
+    <div class="panel panel-default">
+        <div class="panel-heading">Ticketbooking Online</div>
+        <div class="panel-body">
+            @Html.Action("Create", "Ticket")
+        </div>
+    </div>
+</div>

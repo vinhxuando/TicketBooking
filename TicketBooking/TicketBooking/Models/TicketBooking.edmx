@@ -1,0 +1,825 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TicketBookingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AirlineCompany">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Abbreviation" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BasicPrice">
+          <Key>
+            <PropertyRef Name="GradeID" />
+          </Key>
+          <Property Name="GradeID" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CardInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CardNumber" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ProviderID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CardProvider">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Flight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="AirlineID" Type="int" Nullable="false" />
+          <Property Name="PlaneID" Type="int" Nullable="false" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="DepartTime" Type="datetime" Nullable="false" />
+          <Property Name="DestTime" Type="datetime" Nullable="false" />
+          <Property Name="Departure" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Destination" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CurReg" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GradeTable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Membership">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Role" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Plane">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="NumOfSeats" Type="int" Nullable="false" />
+          <Property Name="RatioPrice" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RegisteredUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SeatDetail">
+          <Key>
+            <PropertyRef Name="PlaneID" />
+            <PropertyRef Name="GradeID" />
+          </Key>
+          <Property Name="PlaneID" Type="int" Nullable="false" />
+          <Property Name="GradeID" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="NumOfSeat" Type="int" Nullable="false" />
+          <Property Name="CurReg" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StatusBoard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="GradeID" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="FlightID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="RegisteredUser_ID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_BasicPrice_GradeTable">
+          <End Role="GradeTable" Type="Self.GradeTable" Multiplicity="1" />
+          <End Role="BasicPrice" Type="Self.BasicPrice" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="GradeTable">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BasicPrice">
+              <PropertyRef Name="GradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CardInfo_CardProvider">
+          <End Role="CardProvider" Type="Self.CardProvider" Multiplicity="1" />
+          <End Role="CardInfo" Type="Self.CardInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CardProvider">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CardInfo">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CardInfo_RegisteredUser">
+          <End Role="RegisteredUser" Type="Self.RegisteredUser" Multiplicity="1" />
+          <End Role="CardInfo" Type="Self.CardInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegisteredUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CardInfo">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_AirlineCompany">
+          <End Role="AirlineCompany" Type="Self.AirlineCompany" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AirlineCompany">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="AirlineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_Plane">
+          <End Role="Plane" Type="Self.Plane" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plane">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="PlaneID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_StatusBoard">
+          <End Role="StatusBoard" Type="Self.StatusBoard" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusBoard">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Membership_RegisteredUser">
+          <End Role="RegisteredUser" Type="Self.RegisteredUser" Multiplicity="1" />
+          <End Role="Membership" Type="Self.Membership" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="RegisteredUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Membership">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatDetail_GradeTable">
+          <End Role="GradeTable" Type="Self.GradeTable" Multiplicity="1" />
+          <End Role="SeatDetail" Type="Self.SeatDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GradeTable">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeatDetail">
+              <PropertyRef Name="GradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatDetail_Plane">
+          <End Role="Plane" Type="Self.Plane" Multiplicity="1" />
+          <End Role="SeatDetail" Type="Self.SeatDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plane">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeatDetail">
+              <PropertyRef Name="PlaneID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_Flight">
+          <End Role="Flight" Type="Self.Flight" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flight">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="FlightID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_GradeTable">
+          <End Role="GradeTable" Type="Self.GradeTable" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GradeTable">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="GradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_RegisteredUser">
+          <End Role="RegisteredUser" Type="Self.RegisteredUser" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegisteredUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="RegisteredUser_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TicketBookingModelStoreContainer">
+          <EntitySet Name="AirlineCompany" EntityType="Self.AirlineCompany" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BasicPrice" EntityType="Self.BasicPrice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardInfo" EntityType="Self.CardInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardProvider" EntityType="Self.CardProvider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Flight" EntityType="Self.Flight" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GradeTable" EntityType="Self.GradeTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Membership" EntityType="Self.Membership" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Plane" EntityType="Self.Plane" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RegisteredUser" EntityType="Self.RegisteredUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SeatDetail" EntityType="Self.SeatDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatusBoard" EntityType="Self.StatusBoard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BasicPrice_GradeTable" Association="Self.FK_BasicPrice_GradeTable">
+            <End Role="GradeTable" EntitySet="GradeTable" />
+            <End Role="BasicPrice" EntitySet="BasicPrice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CardInfo_CardProvider" Association="Self.FK_CardInfo_CardProvider">
+            <End Role="CardProvider" EntitySet="CardProvider" />
+            <End Role="CardInfo" EntitySet="CardInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CardInfo_RegisteredUser" Association="Self.FK_CardInfo_RegisteredUser">
+            <End Role="RegisteredUser" EntitySet="RegisteredUser" />
+            <End Role="CardInfo" EntitySet="CardInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_AirlineCompany" Association="Self.FK_Flight_AirlineCompany">
+            <End Role="AirlineCompany" EntitySet="AirlineCompany" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_Plane" Association="Self.FK_Flight_Plane">
+            <End Role="Plane" EntitySet="Plane" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_StatusBoard" Association="Self.FK_Flight_StatusBoard">
+            <End Role="StatusBoard" EntitySet="StatusBoard" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Membership_RegisteredUser" Association="Self.FK_Membership_RegisteredUser">
+            <End Role="RegisteredUser" EntitySet="RegisteredUser" />
+            <End Role="Membership" EntitySet="Membership" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatDetail_GradeTable" Association="Self.FK_SeatDetail_GradeTable">
+            <End Role="GradeTable" EntitySet="GradeTable" />
+            <End Role="SeatDetail" EntitySet="SeatDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatDetail_Plane" Association="Self.FK_SeatDetail_Plane">
+            <End Role="Plane" EntitySet="Plane" />
+            <End Role="SeatDetail" EntitySet="SeatDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Flight" Association="Self.FK_Ticket_Flight">
+            <End Role="Flight" EntitySet="Flight" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_GradeTable" Association="Self.FK_Ticket_GradeTable">
+            <End Role="GradeTable" EntitySet="GradeTable" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_RegisteredUser" Association="Self.FK_Ticket_RegisteredUser">
+            <End Role="RegisteredUser" EntitySet="RegisteredUser" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TicketBookingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AirlineCompany">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Abbreviation" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Flights" Relationship="Self.FK_Flight_AirlineCompany" FromRole="AirlineCompany" ToRole="Flight" />
+        </EntityType>
+        <EntityType Name="BasicPrice">
+          <Key>
+            <PropertyRef Name="GradeID" />
+          </Key>
+          <Property Name="GradeID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <NavigationProperty Name="GradeTable" Relationship="Self.FK_BasicPrice_GradeTable" FromRole="BasicPrice" ToRole="GradeTable" />
+        </EntityType>
+        <EntityType Name="CardInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProviderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CardProvider" Relationship="Self.FK_CardInfo_CardProvider" FromRole="CardInfo" ToRole="CardProvider" />
+          <NavigationProperty Name="RegisteredUser" Relationship="Self.FK_CardInfo_RegisteredUser" FromRole="CardInfo" ToRole="RegisteredUser" />
+        </EntityType>
+        <EntityType Name="CardProvider">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CardInfoes" Relationship="Self.FK_CardInfo_CardProvider" FromRole="CardProvider" ToRole="CardInfo" />
+        </EntityType>
+        <EntityType Name="Flight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AirlineID" Type="Int32" Nullable="false" />
+          <Property Name="PlaneID" Type="Int32" Nullable="false" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="DepartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DestTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Departure" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Destination" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CurReg" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AirlineCompany" Relationship="Self.FK_Flight_AirlineCompany" FromRole="Flight" ToRole="AirlineCompany" />
+          <NavigationProperty Name="Plane" Relationship="Self.FK_Flight_Plane" FromRole="Flight" ToRole="Plane" />
+          <NavigationProperty Name="StatusBoard" Relationship="Self.FK_Flight_StatusBoard" FromRole="Flight" ToRole="StatusBoard" />
+          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Flight" FromRole="Flight" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="GradeTable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="BasicPrice" Relationship="Self.FK_BasicPrice_GradeTable" FromRole="GradeTable" ToRole="BasicPrice" />
+          <NavigationProperty Name="SeatDetails" Relationship="Self.FK_SeatDetail_GradeTable" FromRole="GradeTable" ToRole="SeatDetail" />
+          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_GradeTable" FromRole="GradeTable" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Membership">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="RegisteredUser" Relationship="Self.FK_Membership_RegisteredUser" FromRole="Membership" ToRole="RegisteredUser" />
+        </EntityType>
+        <EntityType Name="Plane">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NumOfSeats" Type="Int32" Nullable="false" />
+          <Property Name="RatioPrice" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Flights" Relationship="Self.FK_Flight_Plane" FromRole="Plane" ToRole="Flight" />
+          <NavigationProperty Name="SeatDetails" Relationship="Self.FK_SeatDetail_Plane" FromRole="Plane" ToRole="SeatDetail" />
+        </EntityType>
+        <EntityType Name="RegisteredUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CardInfoes" Relationship="Self.FK_CardInfo_RegisteredUser" FromRole="RegisteredUser" ToRole="CardInfo" />
+          <NavigationProperty Name="Membership" Relationship="Self.FK_Membership_RegisteredUser" FromRole="RegisteredUser" ToRole="Membership" />
+          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_RegisteredUser" FromRole="RegisteredUser" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SeatDetail">
+          <Key>
+            <PropertyRef Name="PlaneID" />
+            <PropertyRef Name="GradeID" />
+          </Key>
+          <Property Name="PlaneID" Type="Int32" Nullable="false" />
+          <Property Name="GradeID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="NumOfSeat" Type="Int32" Nullable="false" />
+          <Property Name="CurReg" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GradeTable" Relationship="Self.FK_SeatDetail_GradeTable" FromRole="SeatDetail" ToRole="GradeTable" />
+          <NavigationProperty Name="Plane" Relationship="Self.FK_SeatDetail_Plane" FromRole="SeatDetail" ToRole="Plane" />
+        </EntityType>
+        <EntityType Name="StatusBoard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Flights" Relationship="Self.FK_Flight_StatusBoard" FromRole="StatusBoard" ToRole="Flight" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GradeID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FlightID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RegisteredUser_ID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Flight" Relationship="Self.FK_Ticket_Flight" FromRole="Ticket" ToRole="Flight" />
+          <NavigationProperty Name="GradeTable" Relationship="Self.FK_Ticket_GradeTable" FromRole="Ticket" ToRole="GradeTable" />
+          <NavigationProperty Name="RegisteredUser" Relationship="Self.FK_Ticket_RegisteredUser" FromRole="Ticket" ToRole="RegisteredUser" />
+        </EntityType>
+        <Association Name="FK_Flight_AirlineCompany">
+          <End Role="AirlineCompany" Type="Self.AirlineCompany" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AirlineCompany">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="AirlineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BasicPrice_GradeTable">
+          <End Role="GradeTable" Type="Self.GradeTable" Multiplicity="1" />
+          <End Role="BasicPrice" Type="Self.BasicPrice" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="GradeTable">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BasicPrice">
+              <PropertyRef Name="GradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CardInfo_CardProvider">
+          <End Role="CardProvider" Type="Self.CardProvider" Multiplicity="1" />
+          <End Role="CardInfo" Type="Self.CardInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CardProvider">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CardInfo">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CardInfo_RegisteredUser">
+          <End Role="RegisteredUser" Type="Self.RegisteredUser" Multiplicity="1" />
+          <End Role="CardInfo" Type="Self.CardInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegisteredUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CardInfo">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_Plane">
+          <End Role="Plane" Type="Self.Plane" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plane">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="PlaneID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_StatusBoard">
+          <End Role="StatusBoard" Type="Self.StatusBoard" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusBoard">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_Flight">
+          <End Role="Flight" Type="Self.Flight" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flight">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="FlightID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatDetail_GradeTable">
+          <End Role="GradeTable" Type="Self.GradeTable" Multiplicity="1" />
+          <End Role="SeatDetail" Type="Self.SeatDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GradeTable">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeatDetail">
+              <PropertyRef Name="GradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_GradeTable">
+          <End Role="GradeTable" Type="Self.GradeTable" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GradeTable">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="GradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Membership_RegisteredUser">
+          <End Role="RegisteredUser" Type="Self.RegisteredUser" Multiplicity="1" />
+          <End Role="Membership" Type="Self.Membership" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="RegisteredUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Membership">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatDetail_Plane">
+          <End Role="Plane" Type="Self.Plane" Multiplicity="1" />
+          <End Role="SeatDetail" Type="Self.SeatDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plane">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeatDetail">
+              <PropertyRef Name="PlaneID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_RegisteredUser">
+          <End Role="RegisteredUser" Type="Self.RegisteredUser" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegisteredUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="RegisteredUser_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TicketBookingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AirlineCompanies" EntityType="Self.AirlineCompany" />
+          <EntitySet Name="BasicPrices" EntityType="Self.BasicPrice" />
+          <EntitySet Name="CardInfoes" EntityType="Self.CardInfo" />
+          <EntitySet Name="CardProviders" EntityType="Self.CardProvider" />
+          <EntitySet Name="Flights" EntityType="Self.Flight" />
+          <EntitySet Name="GradeTables" EntityType="Self.GradeTable" />
+          <EntitySet Name="Memberships" EntityType="Self.Membership" />
+          <EntitySet Name="Planes" EntityType="Self.Plane" />
+          <EntitySet Name="RegisteredUsers" EntityType="Self.RegisteredUser" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="SeatDetails" EntityType="Self.SeatDetail" />
+          <EntitySet Name="StatusBoards" EntityType="Self.StatusBoard" />
+          <EntitySet Name="Tickets" EntityType="Self.Ticket" />
+          <AssociationSet Name="FK_Flight_AirlineCompany" Association="Self.FK_Flight_AirlineCompany">
+            <End Role="AirlineCompany" EntitySet="AirlineCompanies" />
+            <End Role="Flight" EntitySet="Flights" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BasicPrice_GradeTable" Association="Self.FK_BasicPrice_GradeTable">
+            <End Role="GradeTable" EntitySet="GradeTables" />
+            <End Role="BasicPrice" EntitySet="BasicPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CardInfo_CardProvider" Association="Self.FK_CardInfo_CardProvider">
+            <End Role="CardProvider" EntitySet="CardProviders" />
+            <End Role="CardInfo" EntitySet="CardInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CardInfo_RegisteredUser" Association="Self.FK_CardInfo_RegisteredUser">
+            <End Role="RegisteredUser" EntitySet="RegisteredUsers" />
+            <End Role="CardInfo" EntitySet="CardInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_Plane" Association="Self.FK_Flight_Plane">
+            <End Role="Plane" EntitySet="Planes" />
+            <End Role="Flight" EntitySet="Flights" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_StatusBoard" Association="Self.FK_Flight_StatusBoard">
+            <End Role="StatusBoard" EntitySet="StatusBoards" />
+            <End Role="Flight" EntitySet="Flights" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Flight" Association="Self.FK_Ticket_Flight">
+            <End Role="Flight" EntitySet="Flights" />
+            <End Role="Ticket" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatDetail_GradeTable" Association="Self.FK_SeatDetail_GradeTable">
+            <End Role="GradeTable" EntitySet="GradeTables" />
+            <End Role="SeatDetail" EntitySet="SeatDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_GradeTable" Association="Self.FK_Ticket_GradeTable">
+            <End Role="GradeTable" EntitySet="GradeTables" />
+            <End Role="Ticket" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Membership_RegisteredUser" Association="Self.FK_Membership_RegisteredUser">
+            <End Role="RegisteredUser" EntitySet="RegisteredUsers" />
+            <End Role="Membership" EntitySet="Memberships" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatDetail_Plane" Association="Self.FK_SeatDetail_Plane">
+            <End Role="Plane" EntitySet="Planes" />
+            <End Role="SeatDetail" EntitySet="SeatDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_RegisteredUser" Association="Self.FK_Ticket_RegisteredUser">
+            <End Role="RegisteredUser" EntitySet="RegisteredUsers" />
+            <End Role="Ticket" EntitySet="Tickets" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TicketBookingModelStoreContainer" CdmEntityContainer="TicketBookingEntities">
+          <EntitySetMapping Name="AirlineCompanies">
+            <EntityTypeMapping TypeName="TicketBookingModel.AirlineCompany">
+              <MappingFragment StoreEntitySet="AirlineCompany">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BasicPrices">
+            <EntityTypeMapping TypeName="TicketBookingModel.BasicPrice">
+              <MappingFragment StoreEntitySet="BasicPrice">
+                <ScalarProperty Name="GradeID" ColumnName="GradeID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardInfoes">
+            <EntityTypeMapping TypeName="TicketBookingModel.CardInfo">
+              <MappingFragment StoreEntitySet="CardInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardProviders">
+            <EntityTypeMapping TypeName="TicketBookingModel.CardProvider">
+              <MappingFragment StoreEntitySet="CardProvider">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Flights">
+            <EntityTypeMapping TypeName="TicketBookingModel.Flight">
+              <MappingFragment StoreEntitySet="Flight">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AirlineID" ColumnName="AirlineID" />
+                <ScalarProperty Name="PlaneID" ColumnName="PlaneID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="DepartTime" ColumnName="DepartTime" />
+                <ScalarProperty Name="DestTime" ColumnName="DestTime" />
+                <ScalarProperty Name="Departure" ColumnName="Departure" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="CurReg" ColumnName="CurReg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GradeTables">
+            <EntityTypeMapping TypeName="TicketBookingModel.GradeTable">
+              <MappingFragment StoreEntitySet="GradeTable">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Memberships">
+            <EntityTypeMapping TypeName="TicketBookingModel.Membership">
+              <MappingFragment StoreEntitySet="Membership">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Planes">
+            <EntityTypeMapping TypeName="TicketBookingModel.Plane">
+              <MappingFragment StoreEntitySet="Plane">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="NumOfSeats" ColumnName="NumOfSeats" />
+                <ScalarProperty Name="RatioPrice" ColumnName="RatioPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RegisteredUsers">
+            <EntityTypeMapping TypeName="TicketBookingModel.RegisteredUser">
+              <MappingFragment StoreEntitySet="RegisteredUser">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="TicketBookingModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SeatDetails">
+            <EntityTypeMapping TypeName="TicketBookingModel.SeatDetail">
+              <MappingFragment StoreEntitySet="SeatDetail">
+                <ScalarProperty Name="PlaneID" ColumnName="PlaneID" />
+                <ScalarProperty Name="GradeID" ColumnName="GradeID" />
+                <ScalarProperty Name="NumOfSeat" ColumnName="NumOfSeat" />
+                <ScalarProperty Name="CurReg" ColumnName="CurReg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatusBoards">
+            <EntityTypeMapping TypeName="TicketBookingModel.StatusBoard">
+              <MappingFragment StoreEntitySet="StatusBoard">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tickets">
+            <EntityTypeMapping TypeName="TicketBookingModel.Ticket">
+              <MappingFragment StoreEntitySet="Ticket">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GradeID" ColumnName="GradeID" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="RegisteredUser_ID" ColumnName="RegisteredUser_ID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

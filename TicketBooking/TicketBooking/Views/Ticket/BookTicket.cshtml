@@ -1,0 +1,62 @@
+﻿@model TicketBooking.Models.Ticket
+
+<script type="text/javascript">
+    calTotalPrice();
+</script>
+
+@using (Html.BeginForm("BookTicket", "Ticket", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-2">
+            @Html.LabelFor(x => x.FlightID)
+        </div>
+        <div class="col-md-4">
+            @Html.DropDownListFor(x=>x.FlightID, new SelectList(ViewBag.Flights, "ID", "ID"), new { id = "txtFlightID", @class = "form-control" })
+        </div>
+        <div class="col-md-2">
+            User ID:
+        </div>
+        <div class="col-md-4">
+            @if (Model.RegisteredUser_ID == int.MinValue)
+            {
+                <input type="text" disabled value="#####" class="form-control" />
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.RegisteredUser_ID, new { disabled = true, @class = "form-control" })
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            Class:
+        </div>
+        <div class="col-md-4">
+            @Html.DropDownListFor(x => x.GradeID, new SelectList(ViewBag.Grades, "BasicPrice.Price", "Name"), new { id = "grades", @class = "form-control", onchange = "calTotalPrice()" })
+        </div>
+        <div class="col-md-2">
+            Total price ($):
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(x => x.Price, new { id = "totalPrice", disabled = true, @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            Number of seat(s):
+        </div>
+        <div class="col-md-4">
+            <input id="numOfSeat" name="numOfSeat" class="form-control" type="number" min="1" max="Flight.Plane.NumOfSeats" value="1" onchange="calTotalPrice()"/>
+        </div>
+        <div class="col-md-2">
+            Remaining Seat(s):
+        </div>
+        <div class="col-md-4">
+            <input id="remainingSeat" class="form-control" type="text" disabled />
+        </div>
+    </div>
+    <div class="row">
+        <center><button type="submit" class="form-control" style="width:25%" >Submit</button></center>
+    </div>
+}

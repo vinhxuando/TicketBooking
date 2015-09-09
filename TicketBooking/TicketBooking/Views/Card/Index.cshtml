@@ -1,0 +1,24 @@
+﻿@model IEnumerable<TicketBooking.Models.CardInfo>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Your card details</div>
+    <table class="table">
+        <tr>
+            <th>#</th>
+            <th>Card Number</th>
+            <th>Provider</th>
+        </tr>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                <td>@(i+1)</td>
+                <td>@Model.ElementAt(i).CardNumber</td>
+                <td>@Model.ElementAt(i).CardProvider.Name</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="panel panel-default">
+    <button type="button" class="form-control" onclick="loadPage('/Card/Create')">Add New Card</button>
+</div>

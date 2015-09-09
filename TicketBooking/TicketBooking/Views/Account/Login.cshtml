@@ -1,0 +1,37 @@
+﻿@model TicketBooking.Models.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h2 class="form-signin-heading">Login</h2>
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnURl }, FormMethod.Post, new { @class = "form-signin" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                @Html.TextBoxFor(x => x.Username, new { @class = "form-control", placeholder = "Username", required = "true" })
+                @Html.ValidationMessageFor(x => x.Username)
+            </div>
+            <br />
+            <div class="row">
+                @Html.TextBoxFor(x => x.Password, new { @class = "form-control", placeholder = "Password", required = "true", type = "password" })
+                @Html.ValidationMessageFor(x => x.Password)
+            </div>
+            <br />
+            <div class="row">
+                <button type="submit" class="btn-default">Login</button> or @Html.ActionLink("register new account", "Register", "Account")
+            </div>
+        }
+        
+    </div>
+    <div class="col-md-4">
+        <h3 class="form-signin-heading">Login with another service</h3>
+        <div class="row">
+            <a href="@Url.Action("FacebookLogin", "Account")">
+                <img src="@Url.Content("~/img/fb-icon.png")" width="42" height="42" />
+            </a>
+        </div>
+    </div>
+</div>

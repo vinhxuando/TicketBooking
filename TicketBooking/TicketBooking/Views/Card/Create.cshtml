@@ -1,0 +1,39 @@
+﻿@model TicketBooking.Models.CardInfo
+
+<div class="panel panel-default">
+    <div class="panel-heading">Fill in all information</div>
+    <div class="panel-body">
+        @using(Html.BeginForm("Create", "Card", FormMethod.Post, new { id = "formCardCreate" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.ID)
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(x => x.UserID)
+                </div>
+                <div class="col-md-5">
+                    @Html.TextBoxFor(x => x.UserID, new { disabled = true, @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(x => x.CardNumber)
+                </div>
+                <div class="col-md-5">
+                    @Html.TextBoxFor(x => x.CardNumber, new { @class = "form-control", required = true })
+                    @Html.ValidationMessageFor(x => x.CardNumber)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(x => x.CardProvider.Name)
+                </div>
+                <div class="col-md-5">
+                    @Html.DropDownListFor(x => x.ProviderID, new SelectList(ViewBag.Providers, "ID", "Name"), new { @class = "form-control" })
+                </div>
+            </div>
+            <br />
+            <button type="submit" class="form-control">Submit</button>
+        }
+    </div>
+</div>

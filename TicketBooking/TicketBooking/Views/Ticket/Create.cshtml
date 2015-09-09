@@ -1,0 +1,51 @@
+﻿
+@{ 
+    Layout = null;
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Select departure and destination</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2">
+                Departure:
+            </div>
+            <div class="col-md-4">
+                <select id="departures" class="form-control" onchange="loadDestination()">
+                    <option value="#">Select departure</option>
+                    @foreach (var place in ViewBag.Departures)
+                    {
+                        <option value="@place">@place</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                Date:
+            </div>
+            <div id="divDateDeparture" class="col-md-4">
+                @Html.Action("GetDateDeparture", "Ticket")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                Destination:
+            </div>
+            <div id="divDest" class="col-md-4">
+                @Html.Action("GetDestination", "Ticket")
+            </div>
+            <div class="col-md-2">
+                Date:
+            </div>
+            <div id="divDateDest" class="col-md-4">
+                @Html.Action("GetDateDestination", "Ticket")
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="panel panel-default">
+    <div class="panel-heading">Flight details</div>
+    <div id="divBookTicket" class="panel-body">
+
+    </div>
+</div>

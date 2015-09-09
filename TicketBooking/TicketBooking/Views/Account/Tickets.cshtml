@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TicketBooking.Models.Ticket>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Registered Tickets</div>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>FilghtID</th>
+            <th>Departure</th>
+            <th>Destination</th>
+            <th>Time</th>
+            <th>Class</th>
+            <th>Price</th>
+        </tr>
+        @foreach (var ticket in Model)
+        {
+            if(ticket.Flight.DepartTime.CompareTo(DateTime.Now) >= 0)
+            {
+                <tr>
+                    <td>@ticket.ID</td>
+                    <td>@ticket.FlightID</td>
+                    <td>@ticket.Flight.Departure</td>
+                    <td>@ticket.Flight.Destination</td>
+                    <td>@ticket.Flight.DepartTime</td>
+                    <td>@ticket.GradeTable.Name</td>
+                    <td>@ticket.Price</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+<hr />
+
+<div class="panel panel-default">
+    <div class="panel-heading">Used Tickets</div>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>FilghtID</th>
+            <th>Departure</th>
+            <th>Destination</th>
+            <th>Time</th>
+            <th>Class</th>
+            <th>Price</th>
+        </tr>
+        @foreach (var ticket in Model)
+        {
+            if (ticket.Flight.DepartTime.CompareTo(DateTime.Now) < 0)
+            {
+                <tr>
+                    <td>@ticket.ID</td>
+                    <td>@ticket.FlightID</td>
+                    <td>@ticket.Flight.Departure</td>
+                    <td>@ticket.Flight.Destination</td>
+                    <td>@ticket.Flight.DepartTime</td>
+                    <td>@ticket.GradeTable.Name</td>
+                    <td>@ticket.Price</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
